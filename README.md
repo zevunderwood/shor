@@ -10,9 +10,9 @@ Use shor if you need a library that:
 - Simulates small quantum programs
 - Makes quantum computing easy
 
+We currently support running programs on Qiskit providers including IBMQ quantum computeres.
 
-In the near future we plan to support running your programs on real world quantum computers.
-Write your program once, and run it anywhere.
+In the near future we plan to support other providers. Write your program once, and run it anywhere.
 
 Read the documentation, view tutorials and examples, and join the community at: https://shor.dev/
 

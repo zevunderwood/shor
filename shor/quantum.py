@@ -4,7 +4,7 @@ import numpy as np
 
 from shor.errors import CircuitError
 from shor.gates import _Gate
-from shor.layers import Qbits, _Layer
+from shor.layers import Cbits, Qbits, _Layer
 from shor.operations import Measure, _Operation
 
 
@@ -52,6 +52,19 @@ class QuantumCircuit(object):
             raise CircuitError("No measurement found. Valid quantum circuits must contain a 'Measurement' operation")
 
         return measure_bits
+
+    def to_registers(self):
+        registers = []
+        for m in filter(lambda l: type(l) == Qbits, self.layers):
+            for q in m._qbits:
+                registers.append(q[0])
+        for m in filter(lambda l: type(l) == Cbits, self.layers):
+            registers.append(m)
+
+        if not registers:
+            raise CircuitError("No qubits found. Qubits must be initialized before adding 'Gate' object")
+
+        return registers
 
     def __add__(self, other):
         return self.add(other)

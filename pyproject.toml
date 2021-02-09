@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "shor"
-version = "0.0.5"
+version = "0.0.6"
 description = "Quantum Computing for Humans"
 readme = "README.md"
 authors = ["Collin Overbay - shor.dev <shordotdev@gmail.com>", "Van Magnan <vanmagnan@gmail.com>"]

@@ -6,6 +6,7 @@ from shor.quantum import QC
 
 
 def to_qiskit_circuit(shor_circuit: QC) -> QuantumCircuit:
+    # shor_registers = shor_circuit.to_registers()  # unsure here how to add registers like QuantumCircuit(3,1,1)
     qiskit_circuit = QuantumCircuit(
         len(shor_circuit.initial_state()),
         len(shor_circuit.measure_bits()),

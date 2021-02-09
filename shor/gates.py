@@ -22,10 +22,12 @@ class _Gate(_Layer):
     def symbol(self):
         return self.__class__.__name__.lower()
 
-    def __init__(self, *qbits: QbitOrIterable, **kwargs):
+    def __init__(self, bool=None, cbit=None, *qbits: QbitOrIterable, **kwargs):
         super().__init__(**kwargs)
         self.qbits = flatten(qbits) if qbits else [0]
         self.dimension = kwargs.get("dimension", 1)
+        self.bool = bool
+        self.cbit = cbit
 
         assert all(map(lambda q: type(q) == int, self.qbits)), str(self.qbits)
         try:
@@ -67,6 +69,11 @@ class _Gate(_Layer):
 
     def __invert__(self):
         return self.invert()
+
+    def apply_if(self, cbit, bool):
+        self.bool = bool
+        self.cbit = cbit
+        # Send this over to __init__? now to finish initializing the gate
 
 
 class CNOT(_Gate):

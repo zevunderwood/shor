@@ -36,7 +36,7 @@ class _Gate(_Layer):
 
     num_states(self):Returns the number of states associated with a state vector and its gate matrix
 
-    to_matrix(self): Return matrix form of gate object
+    to_matrix(self): Return unitary matrix form of gate object
 
     matrix(self): Call to_matrix which returns matrix form of gate object
 

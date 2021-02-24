@@ -1535,7 +1535,6 @@ class Cr(_Gate):
 
     def to_matrix(self) -> np.ndarray:
         """Returns matrix form of gate as numpy array
-        Needs no inputs
 
         Returns
         -------

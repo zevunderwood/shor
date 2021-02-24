@@ -12,6 +12,8 @@ QbitOrIterable = Union[int, Iterable]
 
 class _Gate(_Layer):
     """Abstract base quantum gate class
+    
+    A quantum gate operates on qbits only, and represents a pure (unitary) quantum operation.
 
     input_length = valid length of input qubits
     qubits = indices of qubits, to be used as input to gate.

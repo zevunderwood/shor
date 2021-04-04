@@ -53,5 +53,18 @@ class Barrier(_Operation):
         super().__init__()
 
 
+class Conditional(_Operation, _Layer):
+    symbol = "conditional"
+
+    def __init__(self, cbit, logic, gate, *qbits, **kwargs):
+        self.cbit = cbit
+        self.logic = logic
+        self.gate = gate
+        self.qbits = self.gate.qubits
+
+        super().__init__(**kwargs)
+
+
 # Aliases
 M = m = Measure
+Cond = cond = c_if = Conditional

@@ -36,7 +36,7 @@ from shor.gates import (
     X,
 )
 from shor.layers import Cbits, Qbits, Qubits
-from shor.operations import Barrier, Measure
+from shor.operations import Barrier, Measure, c_if
 from shor.providers import QiskitProvider
 from shor.quantum import QC, Circuit
 
@@ -554,7 +554,7 @@ def test_grover_search_for_6():
 @pytest.mark.xfail(reason="Don't have capability to multiple qbit classes in one QC and index between them")
 def test_mlt_qbit_mlt_cbit1():
     qbits1 = Qbits(1)
-    qbits2 = Qbits(1)
+    qbits2 = Qbits(2)
     circ = QC()
     circ.add(qbits1)
     circ.add(qbits2)
@@ -621,3 +621,93 @@ def test_partial_teleportation():
     assert result["01"] > 225
     assert result["10"] > 225
     assert result["11"] > 225
+
+
+@pytest.mark.xfail(reason="Don't have capability measure with cbit name")
+def test_names():
+    qbits1 = Qbits(1, name="qbit1")
+    cbits1 = Cbits(1, name="cbit1")
+    circ = QC()
+    circ.add(qbits1)
+    circ.add(cbits1)
+    circ.add(H(0))
+    circ.add(Measure(0, output_bits="cbit1"))
+
+    result = circ.run(1000).result
+    print(result)
+    assert result["1"] > 450
+    assert result["0"] > 450
+
+
+def test_names():
+    qbits1 = Qbits(1, name="qbit1")
+    cbits1 = Cbits(1, name="cbit1")
+    circ = QC()
+    circ.add(qbits1)
+    circ.add(cbits1)
+    circ.add(H(0))
+    circ.add(Measure(0, output_bits=0))
+
+    result = circ.run(1000).result
+    print(result)
+    assert result["1"] > 450
+    assert result["0"] > 450
+
+
+def test_c_if():
+    qbits1 = Qbits(1, name="qbit1")
+    cbits1 = Cbits(1, name="cbit1")
+    circ = QC()
+    circ.add(qbits1)
+    circ.add(cbits1)
+    circ.add(H(0))
+    circ.add(c_if("cbit1", 1, H(0)))
+    circ.add(Measure(0, output_bits=0))
+
+    result = circ.run(1000).result
+    print(result)
+    assert result["1"] > 450
+    assert result["0"] > 450
+
+
+def test_c_if2():
+    qbits1 = Qbits(2)
+    cbits1 = Cbits(1, name=["cbit1"])
+    cbits2 = Cbits(1, name=["cbit2"])
+    circ = QC()
+    circ.add(qbits1)
+    circ.add(cbits1)
+    circ.add(cbits2)
+    circ.add(X(0))
+    circ.add(Measure(0, output_bits=0))
+    circ.add(c_if("cbit1", 1, X(1)))
+    circ.add(Measure(1, output_bits=0))
+
+    result = circ.run(1000).result
+    print(result)
+    assert result["0"] == 1000
+
+
+# TODO: add test for mulitple qbit and cbit names
+# TODO: add test for Measure(0,1, output_bits = [0, 2]
+
+
+# def test_teleportation():
+#     teleportation_circuit = Circuit()
+#     teleportation_circuit.add(Qubits(3))
+#     teleportation_circuit.add(Cbits(2))  # Should be able to Circuit.add(Qubits(3),Cbits(2))ID = ['c1', 'c2']
+#     teleportation_circuit.add(H(1))
+#     teleportation_circuit.add(CNOT(1, 2))
+#     teleportation_circuit.add(Barrier())
+#     teleportation_circuit.add(CNOT(0, 1))
+#     teleportation_circuit.add(H(0))
+#     teleportation_circuit.add(Measure([0]))
+#     teleportation_circuit.add(Measure([1]))
+#     teleportation_circuit.add(Barrier())
+#     c_if
+#     teleportation_circuit.add(c_if("c1", 1, PauliX(1)))
+#     teleportation_circuit.add(Conditional(0, 1, PauliZ(1)))
+#     teleportation_circuit.add(Measure(2))
+#     job = teleportation_circuit.run(1024, QiskitProvider(backend="qasm_simulator"))
+#     result = job.result
+#     print(result)

@@ -13,12 +13,15 @@ class _Layer(object):
 
 
 class Qbits(_Layer, Iterable):
-    def __init__(self, num, state=0, **kwargs):
+    def __init__(self, num, name=None, state=0, **kwargs):
         self.num = num
         self.state = state
         self._qbits = [(i, self) for i in range(num)]
 
-        super().__init__(name="Qbits ({})".format(str(num)), **kwargs)
+        if name == None:
+            super().__init__(name="qbits_{}".format(str(num)), **kwargs)
+        else:
+            super().__init__(name=name, **kwargs)
 
     def to_gates(self):
         return []
@@ -34,12 +37,15 @@ class Qbits(_Layer, Iterable):
 
 
 class Cbits(_Layer, Iterable):
-    def __init__(self, num, state=0, **kwargs):
+    def __init__(self, num, name=None, state=0, **kwargs):
         self.num = num
         self.state = state
         self._cbits = [(i, self) for i in range(num)]
 
-        super().__init__(name="Cbits ({})".format(str(num)), **kwargs)
+        if name == None:
+            super().__init__(name="cbits_{}".format(str(num)), **kwargs)
+        else:
+            super().__init__(name=name, **kwargs)
 
     def to_gates(self):
         return []
